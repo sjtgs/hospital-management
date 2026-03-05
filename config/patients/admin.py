@@ -8,7 +8,7 @@ class PatientAdmin(admin.ModelAdmin):
         "first_name",
         "last_name",
         "guardian",
-        "date_registered"
+        "date_registered",
     )
 
     search_fields = (
