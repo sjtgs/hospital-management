@@ -1,38 +1,42 @@
 from datetime import datetime
 from django.core.exceptions import ValidationError
+
 from appointments.models import Appointment
-from doctor.models import Doctor
+from appointments.services.scheduling_engine import (
+    validate_doctor_schedule
+)
 
-# Appointment Function to Schedule the Appointment
-def schedule_appointment(patient, doctor,
-                         appointment_date,
-                         appointment_time,
-                         reason=""):
 
-    #  Future Date Validation
+def schedule_appointment(
+    patient,
+    doctor,
+    appointment_date,
+    appointment_time,
+    reason=""
+):
+    """
+    Creates a new appointment after validating scheduling rules.
+    """
+
     appointment_datetime = datetime.combine(
         appointment_date,
         appointment_time
     )
 
+    #  Future Date Validation 
     if appointment_datetime <= datetime.now():
         raise ValidationError(
-            "Appointments must be scheduled for future date and time"
+            "Appointments must be scheduled for a future date and time."
         )
 
-    # Doctor Availability Check
-    exists = Appointment.objects.filter(
-        doctor=doctor,
-        appointment_date=appointment_date,
-        appointment_time=appointment_time
-    ).exists()
+    # Doctor Availability Validation 
+    validate_doctor_schedule(
+        doctor,
+        appointment_date,
+        appointment_time
+    )
 
-    if exists:
-        raise ValidationError(
-            "Selected doctor is not available at this time"
-        )
-
-    #  Create Appointment
+    #  Create Appointment 
     appointment = Appointment.objects.create(
         patient=patient,
         doctor=doctor,
