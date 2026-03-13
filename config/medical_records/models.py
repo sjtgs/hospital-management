@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from appointments.models import Appointment
 
 # Create class for Medical Records 
@@ -10,16 +11,25 @@ class MedicalRecord(models.Model):
     )
 
     symptoms = models.TextField()
-
     diagnosis = models.TextField()
-
     treatment = models.TextField(blank=True)
-
     prescription = models.TextField(blank=True)
-
     notes = models.TextField(blank=True)
-
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def clean(self):
+        """
+        Ensure vitals exist before a medical record is created.
+        """
+        if not self.appointment.vitals.exists():
+            raise ValidationError(
+                "Vitals must be recorded before creating a medical record"
+            )
+
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Medical Record for {self.appointment.patient}"
