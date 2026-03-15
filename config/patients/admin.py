@@ -7,6 +7,7 @@ class PatientAdmin(admin.ModelAdmin):
         "patient_id",
         "first_name",
         "last_name",
+        "age",
         "guardian",
         "date_registered",
     )
@@ -18,3 +19,5 @@ class PatientAdmin(admin.ModelAdmin):
     )
 
     list_filter = ("date_registered",)
+
+

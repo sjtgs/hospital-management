@@ -7,6 +7,9 @@ class Appointment(models.Model):
 
     STATUS_CHOICES = [
         ("scheduled", "Scheduled"),
+        ("checked_in", "Checked In"),
+        ("vitals_recorded", "Vitals Recorded"),
+        ("in_progress", "In Progress"),
         ("completed", "Completed"),
         ("cancelled", "Cancelled"),
         ("noshow", "No Show")
