@@ -1,0 +1,37 @@
+<h2>Patient Search</h2>
+
+<form method="GET">
+    <input type="text" name="q" placeholder="Search patient..." value="{{ query }}">
+    <button type="submit">Search</button>
+</form>
+
+<hr>
+
+{% if patients %}
+
+<table>
+<tr>
+<th>Patient ID</th>
+<th>Name</th>
+<th>Age</th>
+<th>Guardian</th>
+</tr>
+
+{% for patient in patients %}
+
+<tr>
+<td>{{ patient.patient_id }}</td>
+<td>{{ patient.first_name }} {{ patient.last_name }}</td>
+<td>{{ patient.age }}</td>
+<td>{{ patient.guardian.first_name }} {{ patient.guardian.last_name }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% else %}
+
+<p>No patients found.</p>
+
+{% endif %}
